@@ -36,7 +36,7 @@ import org.simpleframework.xml.stream.Format;
  *  @see org.simpleframework.xml.Text
  */
 class TextLabel extends TemplateLabel {
-   
+
    /**
     * This represents the signature of the annotated contact.
     */
@@ -119,7 +119,7 @@ class TextLabel extends TemplateLabel {
     * @return this returns a converter for serializing XML elements
     */
    public Converter getConverter(Context context) throws Exception {
-      String ignore = getEmpty(context);
+      String ignore = detail.isEmpty(empty)? null : empty;
       Type type = getContact();
       
       if(!context.isPrimitive(type)) {
@@ -138,11 +138,12 @@ class TextLabel extends TemplateLabel {
     * 
     * @return this returns the string to use for default values
     */
-   public String getEmpty(Context context) {
+   public Object getEmpty(Context context) throws Exception {
       if(detail.isEmpty(empty)) {
          return null;
       }
-      return empty;
+      PrimitiveFactory factory = new PrimitiveFactory(context, getContact());
+      return factory.getInstance(empty, type);
    }
    
    /**

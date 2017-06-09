@@ -122,7 +122,7 @@ class AttributeLabel extends TemplateLabel {
     * @param context this is context object used for serialization
     */
    public Converter getConverter(Context context) throws Exception {
-      String ignore = getEmpty(context);
+      String ignore = detail.isEmpty(empty)? null : empty;
       Type type = getContact();
       
       return new Primitive(context, type, ignore);
@@ -138,11 +138,12 @@ class AttributeLabel extends TemplateLabel {
     * 
     * @return this returns the string to use for default values
     */
-   public String getEmpty(Context context) {
+   public Object getEmpty(Context context) throws Exception {
       if(detail.isEmpty(empty)) {
          return null;
       }
-      return empty;
+      PrimitiveFactory factory = new PrimitiveFactory(context, getContact());
+      return factory.getInstance(empty, type);
    }
    
    /**
